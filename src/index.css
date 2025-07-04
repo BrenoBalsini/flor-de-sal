@@ -31,5 +31,5 @@ body,
 }
 
 body {
-  @apply bg-gray-200 text-gray-400;
+  @apply bg-gray-100 text-gray-400;
 }
