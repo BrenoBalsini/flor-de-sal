@@ -7,7 +7,7 @@ import {
 } from "react";
 import Input from "../ui/input";
 import Label from "../ui/label";
-import { type MaterialFormData } from "../../pages/page-materials";
+import { type MaterialFormData } from "../../types";
 
 type MaterialFormProps = {
   isOpen: boolean;

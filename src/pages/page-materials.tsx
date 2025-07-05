@@ -2,19 +2,7 @@ import { useState } from "react";
 import useLocalStorageState from 'use-local-storage-state';
 import { PlusCircle, Pencil, Trash2 } from "lucide-react"; 
 import MaterialForm from "../components/core-components/materials-form";
-
-export type Material = {
-  id: string;
-  name: string;
-  purchasePrice: number;
-  purchaseDate: string;
-  purchaseSource: string;
-  unit: 'm' | 'cm' | 'un' | 'rolo' | 'pacote';
-};
-
-export type MaterialFormData = Omit<Material, 'id' | 'purchasePrice'> & {
-  purchasePrice: string;
-};
+import type { Material, MaterialFormData } from "../types";
 
 function formatCurrency(value: number) {
   return value.toLocaleString('pt-BR', {
