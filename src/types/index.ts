@@ -37,3 +37,16 @@ export type SettingsData = {
   dailyHours: string;
   profitMargin: string;
 };
+
+export type HistoryEntry = {
+  id: string;
+  productName: string;
+  result: {
+    materialCost: number;
+    timeCost: number;
+    totalCost: number;
+    profit: number;
+    finalPrice: number;
+  };
+  date: string;
+}

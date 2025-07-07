@@ -3,6 +3,7 @@ import LayoutMain from "./pages/layout-main";
 import PageHome from "./pages/page-home";
 import PageMaterials from "./pages/page-materials";
 import PageSettings from "./pages/page-settings"
+import PageHistory from "./pages/page-history";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
           <Route index element={<PageHome />}/>
           <Route path="/materiais" element={<PageMaterials />}/>
           <Route path="/configuracoes" element={<PageSettings />}/>
+          <Route path= "/historico" element={<PageHistory />} />
         </Route>
       </Routes>
 
