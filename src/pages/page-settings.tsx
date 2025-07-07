@@ -4,7 +4,8 @@ import Input from "../components/ui/input";
 import Label from "../components/ui/label";
 import { type SettingsData } from "../types";
 
-const initialSettings: SettingsData = {
+// eslint-disable-next-line react-refresh/only-export-components
+export const initialSettings: SettingsData = {
   hourlyRate: '24,00',
   dailyHours: '8',
   profitMargin: '70',

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import useLocalStorageState from 'use-local-storage-state';
-import { PlusCircle, Pencil, Trash2 } from "lucide-react"; 
+import { PlusCircle, Pencil, Trash2 } from "lucide-react";
 import MaterialForm from "../components/core-components/materials-form";
-import type { Material, MaterialFormData } from "../types";
+import { type Material, type MaterialFormData } from "../types";
 
 function formatCurrency(value: number) {
   return value.toLocaleString('pt-BR', {
@@ -22,18 +22,43 @@ export default function PageMaterials() {
   function handleCloseForm() { setIsFormOpen(false); }
 
   function handleAddMaterial(formData: MaterialFormData) {
-    const priceString = formData.purchasePrice;
-    const sanitizedString = priceString.replace(',', '.');
-    const priceNumber = parseFloat(sanitizedString) || 0;
-    
-    const newMaterial: Material = {
+    const commonData = {
       id: crypto.randomUUID(),
       name: formData.name,
-      purchasePrice: priceNumber,
+      purchasePrice: parseFloat(formData.purchasePrice.replace(',', '.')) || 0,
       purchaseDate: formData.purchaseDate,
       purchaseSource: formData.purchaseSource,
-      unit: formData.unit,
     };
+
+    let newMaterial: Material;
+
+    switch (formData.unitType) {
+      case 'area':
+        newMaterial = {
+          ...commonData,
+          unitType: 'area',
+          purchaseWidth: parseFloat(formData.purchaseWidth || '0') || 0,
+          purchaseHeight: parseFloat(formData.purchaseHeight || '0') || 0,
+        };
+        break;
+      case 'linear':
+        newMaterial = {
+          ...commonData,
+          unitType: 'linear',
+          purchaseLength: parseFloat(formData.purchaseLength || '0') || 0,
+        };
+        break;
+      case 'unidade':
+        newMaterial = {
+          ...commonData,
+          unitType: 'unidade',
+          purchaseQuantity: parseInt(formData.purchaseQuantity || '1', 10) || 1,
+        };
+        break;
+      default:
+        console.error("Tipo de unidade desconhecido:", formData.unitType);
+        return; 
+    }
 
     setMaterials(currentMaterials => [...currentMaterials, newMaterial]);
     handleCloseForm();
