@@ -31,8 +31,8 @@ export default function PageHistory() {
     <div className="space-y-8">
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-3xl font-bold text-wine-base">Histórico de Cálculos</h1>
-          <p className="mt-2 text-gray-300">
+          <h1 className="text-2xl font-bold">Histórico de Cálculos</h1>
+          <p className="text-gray-300">
             Consulte aqui os preços de produtos que você já calculou.
           </p>
         </div>

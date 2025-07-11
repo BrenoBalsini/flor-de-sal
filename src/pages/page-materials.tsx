@@ -69,8 +69,8 @@ export default function PageMaterials() {
       <div className="space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-wine-base">Meus Materiais</h1>
-            <p className="mt-2 text-gray-300">
+            <h1 className="text-2xl font-bold">Meus Materiais</h1>
+            <p className="text-gray-300">
               Cadastre e gerencie os insumos que você usa para criar seus produtos.
             </p>
           </div>

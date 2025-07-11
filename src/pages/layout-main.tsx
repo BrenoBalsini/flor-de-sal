@@ -1,19 +1,11 @@
 import { Outlet } from "react-router-dom";
-import NavBar from "../components/core-components/nav-bar";
-import Logo from "../components/ui/logo";
+import NavBar from "../components/core-components/nav-bar"; 
 
 export default function LayoutMain() {
   return (
-    <div className="h-screen bg-gray-200 font-sans grid grid-rows-[auto_1fr] grid-cols-[auto_1fr] pr-4">
-      <div></div>
-
-      <header className="p-4">
-        <Logo />
-      </header>
-
+    <div className="flex h-screen overflow-hidden font-sans">
       <NavBar />
-
-      <main className="bg-white p-8 overflow-y-auto rounded-lg">
+      <main className="flex-1 overflow-y-auto p-8 bg-white">
         <Outlet />
       </main>
     </div>

@@ -13,7 +13,7 @@ type MaterialFormProps = {
 const initialState: MaterialFormData = {
   name: '',
   purchasePrice: '',
-  purchaseDate: '',
+  purchaseDate: (new Date()).toISOString().slice(0, 10),
   purchaseSource: '',
   unitType: 'unidade',
   purchaseWidth: '',
@@ -72,7 +72,7 @@ export default function MaterialForm({ isOpen, onClose, onSubmit }: MaterialForm
         className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl overflow-y-auto max-h-[90vh]"
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-wine-base">Cadastrar Novo Material</h2>
+          <h2 className="text-xl font-bold">Cadastrar Novo Material</h2>
           <button 
             onClick={onClose}
             className="rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-600"
@@ -89,6 +89,14 @@ export default function MaterialForm({ isOpen, onClose, onSubmit }: MaterialForm
           <div>
             <Label htmlFor="purchasePrice">Preço de Compra Total (R$)</Label>
             <Input id="purchasePrice" type="text" inputMode="decimal" name="purchasePrice" value={formData.purchasePrice} onChange={handleChange} required />
+          </div>
+          <div>
+            <Label htmlFor="purchaseSource">Loja de origem</Label>
+            <Input id="purchaseSource" type="text" name="purchaseSource" value={formData.purchaseSource} onChange={handleChange} required />
+          </div>
+          <div>
+            <Label htmlFor="purchaseDate">Data da compra</Label>
+            <Input id="purchaseDate" type="date" name="purchaseDate" placeholder={formData.purchaseDate} value={formData.purchaseDate} onChange={handleChange}/>
           </div>
           
           <div>

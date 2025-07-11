@@ -1,10 +1,14 @@
 import { type ComponentProps } from "react";
+import { cn } from "../../utils";
 
-export default function Input(props: ComponentProps<'input'>) {
+export default function Input({ className, ...props }: ComponentProps<'input'>) {
   return (
     <input 
-      className="mt-1 block w-full rounded-md border-gray-200 shadow-sm transition-colors focus:border-rose-light focus:ring focus:ring-rose-light focus:ring-opacity-50"
-      {...props}
+      className={cn(
+        "border-1 border-gray-300 max-w-full rounded-lg p-1  focus:border-1",
+        className                         
+      )}
+      {...props} 
     />
   )
 }

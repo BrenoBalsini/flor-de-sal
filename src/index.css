@@ -1,17 +1,10 @@
 @import "tailwindcss";
 
-html,
-body,
-#root {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
 @theme {
   --color-*: initial;
 
   --color-white: #ffffff;
+  --color-black: #000000;
   --color-gray-100: #f4f4f4;
   --color-gray-200: #eaeaea;
   --color-gray-300: #888888;
@@ -21,10 +14,13 @@ body,
   --color-rose-base: #D68080;
   --color-rose-dark: #B96767;
 
+  --color-brand: #fe6d73;
+  --color-brand-light: #fed6d0;
+
   --color-wine-light: #A56D6D;
   --color-wine-base: #732C2C;
   --color-wine-dark: #582121;
-  --font-sans: "Poppins", sans-serif;
+  --font-sans: "Inter", sans-serif;
 
   --shadow-sm: 0px 2px 4px 0px rgba(47, 47, 47, 0.05);
   --shadow-md: 0px 4px 8px 0px rgba(47, 47, 47, 0.1);

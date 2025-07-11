@@ -177,10 +177,10 @@ export default function PageHome() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-wine-base">
+        <h1 className="text-2xl font-bold">
           Calculadora de Preço
         </h1>
-        <p className="mt-2 text-gray-300">
+        <p className="text-gray-300">
           Preencha os dados abaixo para encontrar o preço justo do seu produto.
         </p>
       </div>
@@ -342,7 +342,7 @@ export default function PageHome() {
             <button
               onClick={handleCalculate}
               disabled={isCalculateDisabled}
-              className="w-full rounded-lg bg-rose-base py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-rose-dark disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-lg bg-brand py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-rose-dark disabled:cursor-not-allowed disabled:opacity-60"
             >
               Calcular Preço Final
             </button>
