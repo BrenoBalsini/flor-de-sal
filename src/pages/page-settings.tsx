@@ -42,10 +42,10 @@ export default function PageSettings() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-wine-base">
+        <h1 className="text-2xl font-bold">
           Configurações de Precificação
         </h1>
-        <p className="mt-2 text-gray-300">
+        <p className="text-gray-300">
           Defina seus custos e margens para que a calculadora funcione com precisão.
         </p>
       </div>

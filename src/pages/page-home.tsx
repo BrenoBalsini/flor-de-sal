@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, useMemo } from "react";
+import { useState, type ChangeEvent, useMemo, useRef, useEffect } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import { type Material, type SettingsData, type HistoryEntry } from "../types";
 import Label from "../components/ui/label";
@@ -26,6 +26,7 @@ type CalculationResult = {
 } | null;
 
 export default function PageHome() {
+  const resultsRef = useRef<HTMLDivElement>(null);
   const [settings] = useLocalStorageState<SettingsData>("app-settings", {
     defaultValue: initialSettings,
   });
@@ -34,7 +35,7 @@ export default function PageHome() {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [history, setHistory] = useLocalStorageState<HistoryEntry[]>(
+  const [_history, setHistory] = useLocalStorageState<HistoryEntry[]>(
     "calculation-history",
     {
       defaultValue: [],
@@ -76,6 +77,15 @@ export default function PageHome() {
     }
   }
 
+  useEffect(() => {
+    if (result && resultsRef.current) {
+      resultsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [result]);
+  
   function handleAddMaterialToProduct() {
     if (!selectedMaterialObject) {
       setMaterialError("Por favor, selecione um material para adicionar.");
@@ -177,9 +187,7 @@ export default function PageHome() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold">
-          Calculadora de Preço
-        </h1>
+        <h1 className="text-2xl font-bold">Calculadora de Preço</h1>
         <p className="text-gray-300">
           Preencha os dados abaixo para encontrar o preço justo do seu produto.
         </p>
@@ -300,7 +308,7 @@ export default function PageHome() {
             <div className="mt-4 flex flex-col items-end">
               <button
                 onClick={handleAddMaterialToProduct}
-                className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-green-700 disabled:opacity-50"
+                className="flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors disabled:opacity-50"
                 disabled={!materialConfig.selectedMaterialId}
               >
                 <PlusCircle size={18} />
@@ -348,7 +356,7 @@ export default function PageHome() {
             </button>
 
             {result && (
-              <div className="space-y-2 pt-4 border-t">
+              <div ref={resultsRef} className="space-y-2 pt-4 border-t">
                 <h2 className="text-lg font-semibold text-gray-400">
                   Resultado do Cálculo
                 </h2>

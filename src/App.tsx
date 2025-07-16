@@ -14,7 +14,7 @@ export default function App() {
           <Route index element={<PageHero />}/>
           <Route path="/calculadora" element={<PageHome/>}/>
           <Route path="/materiais" element={<PageMaterials />}/>
-          <Route path="/configuracoes" element={<PageSettings />}/>
+          <Route path="/ajustes" element={<PageSettings />}/>
           <Route path= "/historico" element={<PageHistory />} />
         </Route>
       </Routes>
