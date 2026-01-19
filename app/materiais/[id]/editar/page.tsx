@@ -1,17 +1,19 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { criarMaterial, CriarMaterialInput, TipoMedicao } from '../../../src/services/materiaisService';
-import ProtectedRoute from '../../../src/components/ProtectedRoute';
-import { useAuth } from '../../../src/contexts/AuthContext';
+import { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import { listarMateriais, atualizarMaterial, CriarMaterialInput, TipoMedicao } from '../../../../src/services/materiaisService';
+import ProtectedRoute from '../../../../src/components/ProtectedRoute';
+import { useAuth } from '../../../../src/contexts/AuthContext';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
-function NovoMaterialContent() {
+function EditarMaterialContent() {
   const router = useRouter();
+  const params = useParams();
   const { user } = useAuth();
-  const [carregando, setCarregando] = useState(false);
+  const [carregando, setCarregando] = useState(true);
+  const [salvando, setSalvando] = useState(false);
   
   const [formData, setFormData] = useState<CriarMaterialInput>({
     nome: '',
@@ -23,24 +25,51 @@ function NovoMaterialContent() {
     usuarioId: user?.uid || '',
   });
 
+  useEffect(() => {
+    carregarMaterial();
+  }, [params.id, user]);
+
+  const carregarMaterial = async () => {
+    if (!user?.uid || !params.id) return;
+    
+    setCarregando(true);
+    const materiais = await listarMateriais(user.uid);
+    const material = materiais.find(m => m.id === params.id);
+    
+    if (material) {
+      setFormData({
+        nome: material.nome,
+        tipoMedicao: material.tipoMedicao,
+        precoCompra: material.precoCompra,
+        quantidadeComprada: material.quantidadeComprada,
+        larguraComprada: material.larguraComprada,
+        alturaComprada: material.alturaComprada,
+        comprimentoComprado: material.comprimentoComprado,
+        fornecedor: material.fornecedor || '',
+        observacoes: material.observacoes || '',
+        usuarioId: user.uid,
+      });
+    } else {
+      alert('Material não encontrado');
+      router.push('/materiais');
+    }
+    
+    setCarregando(false);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setCarregando(true);
+    setSalvando(true);
 
-    const materialParaSalvar = {
-      ...formData,
-      usuarioId: user?.uid || '',
-    };
-
-    const resultado = await criarMaterial(materialParaSalvar);
+    const resultado = await atualizarMaterial(params.id as string, formData);
     
     if (resultado.success) {
       router.push('/materiais');
     } else {
-      alert('Erro ao criar material');
+      alert('Erro ao atualizar material');
     }
     
-    setCarregando(false);
+    setSalvando(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -55,6 +84,25 @@ function NovoMaterialContent() {
     
     setFormData(prev => ({ ...prev, [name]: valorProcessado }));
   };
+
+  if (carregando) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '48px',
+            height: '48px',
+            border: '4px solid #00FFCC',
+            borderTopColor: 'transparent',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 16px'
+          }} />
+          <p style={{ color: '#6B7280' }}>Carregando material...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-container">
@@ -72,7 +120,7 @@ function NovoMaterialContent() {
             <ArrowLeft size={24} />
           </Link>
           <h1 style={{ fontSize: '18px', fontWeight: 'bold', color: '#111827', margin: 0 }}>
-            Novo Material
+            Editar Material
           </h1>
         </div>
       </header>
@@ -103,10 +151,10 @@ function NovoMaterialContent() {
             color: '#111827',
             margin: '0 0 8px 0' 
           }}>
-            Novo Material
+            Editar Material
           </h1>
           <p style={{ color: '#6B7280', fontSize: '14px', margin: 0 }}>
-            Adicione um novo material ao seu inventário
+            Atualize as informações do material
           </p>
         </div>
 
@@ -138,7 +186,7 @@ function NovoMaterialContent() {
                 outline: 'none',
                 transition: 'border-color 0.2s'
               }}
-              placeholder="Ex: Tecido de algodão estampado, Botão madrepérola"
+              placeholder="Ex: Tecido de algodão estampado"
               onFocus={(e) => e.target.style.borderColor = '#00FFCC'}
               onBlur={(e) => e.target.style.borderColor = '#D1D5DB'}
             />
@@ -147,7 +195,7 @@ function NovoMaterialContent() {
           {/* Tipo de Medição */}
           <div style={{ marginBottom: '20px' }}>
             <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '10px' }}>
-              Como você comprou este material? *
+              Tipo de Medição *
             </label>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px' }}>
               <label style={{
@@ -428,27 +476,32 @@ function NovoMaterialContent() {
             </button>
             <button
               type="submit"
-              disabled={carregando}
+              disabled={salvando}
               style={{
                 flex: 1,
                 padding: '12px',
                 border: 'none',
-                backgroundColor: carregando ? '#9CA3AF' : '#00FFCC',
+                backgroundColor: salvando ? '#9CA3AF' : '#00FFCC',
                 color: '#111827',
                 borderRadius: '8px',
                 fontSize: '14px',
                 fontWeight: '600',
-                cursor: carregando ? 'not-allowed' : 'pointer',
+                cursor: salvando ? 'not-allowed' : 'pointer',
                 transition: 'all 0.2s'
               }}
             >
-              {carregando ? 'Salvando...' : 'Salvar Material'}
+              {salvando ? 'Salvando...' : 'Atualizar Material'}
             </button>
           </div>
         </form>
       </div>
 
       <style jsx>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+
         .mobile-header {
           display: block;
         }
@@ -485,10 +538,10 @@ function NovoMaterialContent() {
   );
 }
 
-export default function NovoMaterialPage() {
+export default function EditarMaterialPage() {
   return (
     <ProtectedRoute>
-      <NovoMaterialContent />
+      <EditarMaterialContent />
     </ProtectedRoute>
   );
 }
