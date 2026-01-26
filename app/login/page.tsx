@@ -5,84 +5,223 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../../src/contexts/AuthContext';
 
 export default function LoginPage() {
-  const { user, loading, signInWithGoogle } = useAuth();
+  const { user, signInWithGoogle, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    // Se já estiver logado, redireciona para a home
-    if (user && !loading) {
+    if (user) {
       router.push('/');
     }
-  }, [user, loading, router]);
+  }, [user, router]);
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleLogin = async () => {
     try {
       await signInWithGoogle();
-      router.push('/');
     } catch (error) {
-      alert('Erro ao fazer login. Tente novamente.');
+      console.error('Erro ao fazer login:', error);
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Carregando...</p>
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '48px',
+            height: '48px',
+            border: '4px solid white',
+            borderTopColor: 'transparent',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto'
+          }} />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
-        {/* Logo/Nome do App */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-purple-600 mb-2">
-            Flor de Sal
-          </h1>
-          <p className="text-gray-600">
-            Gestão de Artesanato
-          </p>
-        </div>
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      padding: '16px'
+    }}>
+      <div style={{
+        backgroundColor: 'white',
+        borderRadius: '24px',
+        padding: '48px 32px',
+        maxWidth: '440px',
+        width: '100%',
+        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+        textAlign: 'center'
+      }}>
 
-        {/* Descrição */}
-        <div className="mb-8">
-          <p className="text-center text-gray-700">
-            Organize seus materiais, calcule preços e gerencie suas vendas em um só lugar
-          </p>
-        </div>
 
-        {/* Botão de Login com Google */}
+        {/* Título */}
+        <h1 style={{
+          fontSize: '32px',
+          fontWeight: 'bold',
+          color: '#111827',
+          margin: '0 0 8px 0'
+        }}>
+          Flor de Sal
+        </h1>
+
+        <p style={{
+          fontSize: '16px',
+          color: '#6B7280',
+          margin: '0 0 8px 0',
+          fontWeight: '500'
+        }}>
+          Gestão de Artesanato
+        </p>
+
+        <p style={{
+          fontSize: '14px',
+          color: '#9CA3AF',
+          margin: '0 0 32px 0',
+          lineHeight: '1.6'
+        }}>
+          Organize seus materiais, calcule preços e gerencie suas vendas em um só lugar
+        </p>
+
+        {/* Botão Google */}
         <button
-          onClick={handleGoogleSignIn}
-          className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-300 rounded-lg px-6 py-3 hover:bg-gray-50 transition-colors font-medium"
+          onClick={handleGoogleLogin}
+          style={{
+            width: '100%',
+            padding: '16px 24px',
+            backgroundColor: 'white',
+            border: '2px solid #E5E7EB',
+            borderRadius: '12px',
+            fontSize: '16px',
+            fontWeight: '600',
+            color: '#374151',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+            transition: 'all 0.2s',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = '#00FFCC';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 255, 204, 0.2)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = '#E5E7EB';
+            e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
         >
-          <svg className="w-6 h-6" viewBox="0 0 24 24">
-            <path
-              fill="#4285F4"
-              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-            />
-            <path
-              fill="#34A853"
-              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-            />
-            <path
-              fill="#FBBC05"
-              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-            />
-            <path
-              fill="#EA4335"
-              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-            />
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.6 10.227c0-.709-.064-1.39-.182-2.045H10v3.868h5.382a4.6 4.6 0 01-1.996 3.018v2.51h3.232c1.891-1.742 2.982-4.305 2.982-7.35z" fill="#4285F4"/>
+            <path d="M10 20c2.7 0 4.964-.895 6.618-2.423l-3.232-2.509c-.895.6-2.04.955-3.386.955-2.605 0-4.81-1.76-5.595-4.123H1.064v2.59A9.996 9.996 0 0010 20z" fill="#34A853"/>
+            <path d="M4.405 11.9c-.2-.6-.314-1.24-.314-1.9 0-.66.114-1.3.314-1.9V5.51H1.064A9.996 9.996 0 000 10c0 1.614.386 3.14 1.064 4.49l3.34-2.59z" fill="#FBBC05"/>
+            <path d="M10 3.977c1.468 0 2.786.505 3.823 1.496l2.868-2.868C14.959.99 12.695 0 10 0 6.09 0 2.71 2.24 1.064 5.51l3.34 2.59C5.19 5.736 7.396 3.977 10 3.977z" fill="#EA4335"/>
           </svg>
-          <span>Entrar com Google</span>
+          Entrar com Google
         </button>
 
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Ao continuar, você concorda com nossos Termos de Uso
-        </p>
+
+
+        {/* Features */}
+        <div style={{
+          marginTop: '32px',
+          paddingTop: '32px',
+          borderTop: '1px solid #F3F4F6',
+          display: 'grid',
+          gap: '16px',
+          textAlign: 'left'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              backgroundColor: '#F0FDFA',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              📦
+            </div>
+            <div>
+              <h3 style={{ fontSize: '14px', fontWeight: '600', color: '#111827', margin: '0 0 2px 0' }}>
+                Organize Materiais
+              </h3>
+              <p style={{ fontSize: '13px', color: '#6B7280', margin: 0 }}>
+                Gerencie todos os materiais do seu ateliê
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              backgroundColor: '#F0FDFA',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              🧮
+            </div>
+            <div>
+              <h3 style={{ fontSize: '14px', fontWeight: '600', color: '#111827', margin: '0 0 2px 0' }}>
+                Calcule Preços
+              </h3>
+              <p style={{ fontSize: '13px', color: '#6B7280', margin: 0 }}>
+                Precifique corretamente seus produtos
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              backgroundColor: '#F0FDFA',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              📊
+            </div>
+            <div>
+              <h3 style={{ fontSize: '14px', fontWeight: '600', color: '#111827', margin: '0 0 2px 0' }}>
+                Histórico Completo
+              </h3>
+              <p style={{ fontSize: '13px', color: '#6B7280', margin: 0 }}>
+                Salve e acompanhe todos os produtos
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <style jsx>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
