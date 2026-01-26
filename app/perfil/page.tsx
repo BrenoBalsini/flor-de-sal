@@ -236,7 +236,7 @@ function PerfilContent() {
             }}>
               <Info size={16} color="#059669" />
               <p style={{ fontSize: '13px', color: '#047857', margin: 0 }}>
-                Isso equivale a <strong>R$ {valorPorMinuto.toFixed(4)}/minuto</strong>
+                Isso equivale a <strong>R$ {valorPorMinuto.toFixed(2)}/minuto</strong>
               </p>
             </div>
             <p style={{ fontSize: '12px', color: '#6B7280', margin: '8px 0 0 0', lineHeight: '1.5' }}>

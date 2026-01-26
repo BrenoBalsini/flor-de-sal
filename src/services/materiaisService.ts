@@ -1,5 +1,6 @@
 import { db } from '../lib/firebase';
 import { 
+  getDoc,
   collection, 
   addDoc, 
   getDocs, 
@@ -114,6 +115,14 @@ export const atualizarMaterial = async (id: string, dados: Partial<CriarMaterial
   try {
     const materialRef = doc(db, COLLECTION_NAME, id);
     
+    // Busca o material atual primeiro
+    const docSnap = await getDoc(materialRef);
+    if (!docSnap.exists()) {
+      return { success: false, error: 'Material não encontrado' };
+    }
+    
+    const materialAtual = docSnap.data() as Material;
+    
     // Recalcula o preço por unidade base se algum dado relevante mudou
     let dadosAtualizados: any = { ...dados };
     
@@ -124,17 +133,12 @@ export const atualizarMaterial = async (id: string, dados: Partial<CriarMaterial
       }
     });
     
-    if (dados.precoCompra || dados.quantidadeComprada || dados.larguraComprada || 
-        dados.alturaComprada || dados.comprimentoComprado || dados.tipoMedicao) {
+    if (dados.precoCompra !== undefined || dados.quantidadeComprada !== undefined || 
+        dados.larguraComprada !== undefined || dados.alturaComprada !== undefined || 
+        dados.comprimentoComprado !== undefined || dados.tipoMedicao !== undefined) {
       
-      // Busca o material atual
-      const materialAtual = await getDocs(query(collection(db, COLLECTION_NAME)));
-      const materialData = materialAtual.docs.find(d => d.id === id)?.data() as Material;
-      
-      if (materialData) {
-        const materialCompleto = { ...materialData, ...dadosAtualizados } as CriarMaterialInput;
-        dadosAtualizados.precoPorUnidadeBase = calcularPrecoPorUnidadeBase(materialCompleto);
-      }
+      const materialCompleto = { ...materialAtual, ...dadosAtualizados } as CriarMaterialInput;
+      dadosAtualizados.precoPorUnidadeBase = calcularPrecoPorUnidadeBase(materialCompleto);
     }
     
     // Limpa campos que não são do tipo de medição atual
@@ -159,6 +163,9 @@ export const atualizarMaterial = async (id: string, dados: Partial<CriarMaterial
         delete dadosAtualizados[key];
       }
     });
+    
+    // IMPORTANTE: Mantém o usuarioId original
+    dadosAtualizados.usuarioId = materialAtual.usuarioId;
     
     await updateDoc(materialRef, {
       ...dadosAtualizados,
