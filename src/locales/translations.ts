@@ -165,6 +165,25 @@ export const translations = {
     materialNaoEncontrado: "Material não encontrado",
     erroAtualizarMaterial: "Erro ao atualizar material",
     carregandoMaterial: "Carregando material...",
+
+    //Dashboard
+    ola: "Olá",
+    bemVindo: "Bem-vindo ao Flor de Sal",
+    novoMaterialDesc: "Adicione materiais ao inventário",
+    calcularPrecoDashboard: "Calcular Preço",
+    calcularPrecoDesc: "Precifique seus produtos",
+    materiaisCadastrados: "Materiais Cadastrados",
+    investidoMateriais: "Investido em Materiais",
+    produtosCalculados: "Produtos Calculados",
+    precoMedio: "Preço Médio",
+    produtoMaisCaro: "Produto Mais Caro",
+    produtoMaisBarato: "Produto Mais Barato",
+    carregandoDashboard: "Carregando dashboard...",
+    comeceJornada: "Comece sua jornada artesanal!",
+    comeceJornadaDesc:
+      "Adicione seus primeiros materiais e comece a calcular preços justos para seus produtos",
+    adicionarMaterialDashboard: "Adicionar Material",
+    configurarPrecos: "⚙️ Configurar Preços",
   },
 
   en: {
@@ -330,5 +349,24 @@ export const translations = {
     materialNaoEncontrado: "Material not found",
     erroAtualizarMaterial: "Error updating material",
     carregandoMaterial: "Loading material...",
+
+    //Dashboard
+    ola: "Hello",
+    bemVindo: "Welcome to Flor de Sal",
+    novoMaterialDesc: "Add materials to inventory",
+    calcularPrecoDashboard: "Calculate Price",
+    calcularPrecoDesc: "Price your products",
+    materiaisCadastrados: "Registered Materials",
+    investidoMateriais: "Invested in Materials",
+    produtosCalculados: "Calculated Products",
+    precoMedio: "Average Price",
+    produtoMaisCaro: "Most Expensive Product",
+    produtoMaisBarato: "Cheapest Product",
+    carregandoDashboard: "Loading dashboard...",
+    comeceJornada: "Start your craft journey!",
+    comeceJornadaDesc:
+      "Add your first materials and start calculating fair prices for your products",
+    adicionarMaterialDashboard: "Add Material",
+    configurarPrecos: "⚙️ Configure Prices",
   },
 } as const;
