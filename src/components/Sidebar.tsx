@@ -4,40 +4,25 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
 import { Package, Calculator, History, LogOut, UserCog } from "lucide-react";
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function Sidebar() {
   const pathname = usePathname();
   const { user, signOut } = useAuth();
-
-  const navItems = [
-    {
-      name: "Materiais",
-      path: "/materiais",
-      icon: Package,
-    },
-    {
-      name: "Calculadora",
-      path: "/calculadora",
-      icon: Calculator,
-    },
-    {
-      name: "Histórico",
-      path: "/historico",
-      icon: History,
-    },
-    {
-      name: "Ajustes",
-      path: "/perfil",
-      icon: UserCog,
-    },
+  const { t } = useLanguage();
+ const navItems = [
+    { name: t.materiais, path: '/materiais', icon: Package },
+    { name: t.calculadora, path: '/calculadora', icon: Calculator },
+    { name: t.historico, path: '/historico', icon: History },
+    { name: t.ajustes, path: '/perfil', icon: UserCog },
   ];
 
   const handleSignOut = async () => {
-    if (confirm("Deseja sair da sua conta?")) {
+    if (confirm(t.confirmarSaida)) {
       try {
         await signOut();
       } catch (error) {
-        console.error("Erro ao sair:", error);
+        console.error(t.erroSair, error);
       }
     }
   };
@@ -70,7 +55,7 @@ export default function Sidebar() {
           Flor de Sal
         </h1>
         <p style={{ fontSize: "12px", color: "#6B7280", margin: "4px 0 0 0" }}>
-          Gestão de Artesanato
+          {t.gestaoArtesanato}
         </p>
       </div>
 
@@ -183,7 +168,7 @@ export default function Sidebar() {
           }}
         >
           <LogOut size={16} />
-          Sair
+          {t.sair}
         </button>
       </div>
     </aside>

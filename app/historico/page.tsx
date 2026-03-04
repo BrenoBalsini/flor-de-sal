@@ -6,12 +6,16 @@ import Layout from '../../src/components/Layout';
 import ProtectedRoute from '../../src/components/ProtectedRoute';
 import { listarProdutos, deletarProduto, Produto } from '../../src/services/produtosService';
 import { History, Trash2, ChevronDown, ChevronUp, Package, Clock, DollarSign, TrendingUp } from 'lucide-react';
+import { useLanguage } from '../../src/contexts/LanguageContext';
+
 
 function HistoricoContent() {
   const { user } = useAuth();
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [produtoExpandido, setProdutoExpandido] = useState<string | null>(null);
+  const { t } = useLanguage();
+
 
   useEffect(() => {
     if (user) {
@@ -43,7 +47,7 @@ function HistoricoContent() {
 
   const formatarQuantidade = (material: any) => {
     if (material.tipoMedicao === 'unidade') {
-      return `${material.quantidadeUsada} un`;
+      return `${material.quantidadeUsada} ${t.unidade}`;
     } else if (material.tipoMedicao === 'comprimento') {
       return `${material.comprimentoUsado} cm`;
     } else {
@@ -73,7 +77,7 @@ function HistoricoContent() {
             animation: 'spin 1s linear infinite',
             margin: '0 auto 16px'
           }} />
-          <p style={{ color: '#6B7280' }}>Carregando histórico...</p>
+          <p style={{ color: '#6B7280' }}>{t.carregandoHistorico}</p>
         </div>
       </div>
     );
@@ -87,11 +91,11 @@ function HistoricoContent() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
             <History size={32} color="#00FFCC" />
             <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: '#111827', margin: 0 }}>
-              Histórico
+              {t.historicoPagina}
             </h1>
           </div>
           <p style={{ color: '#6B7280', fontSize: '14px', margin: 0 }}>
-            Produtos calculados anteriormente com preços salvos
+            {t.historicoSubtitulo}
           </p>
         </div>
 
@@ -149,11 +153,11 @@ function HistoricoContent() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
                         <span style={{ fontSize: '13px', color: '#6B7280', display: 'flex', alignItems: 'center', gap: '4px' }}>
                           <Package size={14} />
-                          {produto.materiais.length} {produto.materiais.length === 1 ? 'material' : 'materiais'}
+                          {produto.materiais.length} {produto.materiais.length === 1 ? t.material : t.materiais2}
                         </span>
                         <span style={{ fontSize: '13px', color: '#6B7280', display: 'flex', alignItems: 'center', gap: '4px' }}>
                           <Clock size={14} />
-                          {produto.tempoProducaoMinutos} min
+                          {produto.tempoProducaoMinutos} {t.minutos}
                         </span>
                         <span style={{ fontSize: '12px', color: '#9CA3AF' }}>
                           📅 {formatarData(produto.criadoEm)}
@@ -163,9 +167,9 @@ function HistoricoContent() {
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <div style={{ textAlign: 'right' }}>
-                        <p style={{ fontSize: '12px', color: '#6B7280', margin: '0 0 4px 0' }}>Preço</p>
+                        <p style={{ fontSize: '12px', color: '#6B7280', margin: '0 0 4px 0' }}>{t.preco}</p>
                         <p style={{ fontSize: '20px', fontWeight: 'bold', color: '#059669', margin: 0 }}>
-                          R$ {produto.precoFinal.toFixed(2)}
+                          {t.moeda} {produto.precoFinal.toFixed(2)}
                         </p>
                       </div>
                       
@@ -200,7 +204,7 @@ function HistoricoContent() {
                       {/* Breakdown de custos */}
                       <div style={{ marginBottom: '20px' }}>
                         <h4 style={{ fontSize: '14px', fontWeight: '600', color: '#111827', margin: '0 0 12px 0' }}>
-                          💰 Breakdown de Custos
+                          {t.breakdownCustos}
                         </h4>
                         <div style={{
                           backgroundColor: 'white',
@@ -209,24 +213,24 @@ function HistoricoContent() {
                           border: '1px solid #E5E7EB'
                         }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #F3F4F6' }}>
-                            <span style={{ fontSize: '13px', color: '#6B7280' }}>Custo dos materiais:</span>
-                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#111827' }}>R$ {produto.custoMateriais.toFixed(2)}</span>
+                            <span style={{ fontSize: '13px', color: '#6B7280' }}>{t.custoMateriais}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#111827' }}>{t.moeda} {produto.custoMateriais.toFixed(2)}</span>
                           </div>
                           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #F3F4F6' }}>
-                            <span style={{ fontSize: '13px', color: '#6B7280' }}>Mão de obra ({produto.tempoProducaoMinutos} min):</span>
-                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#111827' }}>R$ {produto.custoMaoDeObra.toFixed(2)}</span>
+                            <span style={{ fontSize: '13px', color: '#6B7280' }}>{t.maoDeObra} ({produto.tempoProducaoMinutos} min):</span>
+                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#111827' }}>{t.moeda} {produto.custoMaoDeObra.toFixed(2)}</span>
                           </div>
                           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #F3F4F6' }}>
-                            <span style={{ fontSize: '13px', color: '#6B7280' }}>Custo total:</span>
-                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#111827' }}>R$ {produto.custoTotal.toFixed(2)}</span>
+                            <span style={{ fontSize: '13px', color: '#6B7280' }}>{t.custoTotal}</span>
+                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#111827' }}>{t.moeda} {produto.custoTotal.toFixed(2)}</span>
                           </div>
                           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #F3F4F6' }}>
-                            <span style={{ fontSize: '13px', color: '#6B7280' }}>Margem de lucro:</span>
+                            <span style={{ fontSize: '13px', color: '#6B7280' }}>{t.margemLucroLabel}</span>
                             <span style={{ fontSize: '13px', fontWeight: '600', color: '#111827' }}>{produto.margemLucro}%</span>
                           </div>
                           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0' }}>
-                            <span style={{ fontSize: '14px', color: '#059669', fontWeight: '600' }}>Preço final:</span>
-                            <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#059669' }}>R$ {produto.precoFinal.toFixed(2)}</span>
+                            <span style={{ fontSize: '14px', color: '#059669', fontWeight: '600' }}>{t.precoFinal}</span>
+                            <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#059669' }}>{t.moeda} {produto.precoFinal.toFixed(2)}</span>
                           </div>
                         </div>
                       </div>
@@ -234,7 +238,7 @@ function HistoricoContent() {
                       {/* Lista de materiais */}
                       <div style={{ marginBottom: '20px' }}>
                         <h4 style={{ fontSize: '14px', fontWeight: '600', color: '#111827', margin: '0 0 12px 0' }}>
-                          📦 Materiais Utilizados
+                          {t.materiaisUtilizados}
                         </h4>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                           {produto.materiais.map((material, index) => (
@@ -256,7 +260,7 @@ function HistoricoContent() {
                                   {material.nome}
                                 </p>
                                 <p style={{ fontSize: '12px', color: '#6B7280', margin: 0 }}>
-                                  {formatarQuantidade(material)} • Preço/unidade: R$ {material.precoPorUnidadeBase.toFixed(4)}
+                                  {formatarQuantidade(material)} {t.precoUnidade} {t.moeda} {material.precoPorUnidadeBase.toFixed(4)}
                                 </p>
                               </div>
                               <div style={{
@@ -265,7 +269,7 @@ function HistoricoContent() {
                                 borderRadius: '6px'
                               }}>
                                 <p style={{ fontSize: '13px', fontWeight: '600', color: '#059669', margin: 0 }}>
-                                  R$ {material.custoTotal.toFixed(2)}
+                                  {t.moeda} {material.custoTotal.toFixed(2)}
                                 </p>
                               </div>
                             </div>
@@ -276,7 +280,7 @@ function HistoricoContent() {
                       {/* Configurações usadas */}
                       <div style={{ marginBottom: '20px' }}>
                         <h4 style={{ fontSize: '14px', fontWeight: '600', color: '#111827', margin: '0 0 12px 0' }}>
-                          ⚙️ Configurações Usadas
+                          {t.configuracoesUsadas}
                         </h4>
                         <div style={{
                           backgroundColor: '#FEF3C7',
@@ -288,13 +292,13 @@ function HistoricoContent() {
                           flexWrap: 'wrap'
                         }}>
                           <div>
-                            <p style={{ fontSize: '12px', color: '#92400E', margin: '0 0 2px 0' }}>Valor/hora</p>
+                            <p style={{ fontSize: '12px', color: '#92400E', margin: '0 0 2px 0' }}>{t.valorHoraLabel}</p>
                             <p style={{ fontSize: '14px', fontWeight: '600', color: '#78350F', margin: 0 }}>
-                              R$ {produto.valorPorHora.toFixed(2)}
+                              {t.moeda} {produto.valorPorHora.toFixed(2)}
                             </p>
                           </div>
                           <div>
-                            <p style={{ fontSize: '12px', color: '#92400E', margin: '0 0 2px 0' }}>Margem</p>
+                            <p style={{ fontSize: '12px', color: '#92400E', margin: '0 0 2px 0' }}>{t.margemLabel}</p>
                             <p style={{ fontSize: '14px', fontWeight: '600', color: '#78350F', margin: 0 }}>
                               {produto.margemLucro}%
                             </p>
@@ -328,7 +332,7 @@ function HistoricoContent() {
                         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FEE2E2'}
                       >
                         <Trash2 size={16} />
-                        Remover do Histórico
+                        {t.removerHistorico}
                       </button>
                     </div>
                   )}
